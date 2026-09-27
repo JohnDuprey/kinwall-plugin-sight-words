@@ -1,0 +1,30 @@
+/* Kinwall passes the family's theme as --kw-* variables (see kinwall.js); these are fallbacks. */
+:root {
+  --kw-bg: #FFF8F2; --kw-card: #FFFFFF; --kw-text: #3D2B24; --kw-dim: #7A6158; --kw-accent: #E07A55; --kw-accent-ink: #3A1D10; --kw-border: #EADFD6;
+  --kw-font: system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--kw-bg); color: var(--kw-text); font-family: var(--kw-font); }
+main { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 20px; }
+header { position: fixed; top: 12px; left: 16px; right: 16px; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; }
+.stars { letter-spacing: 2px; }
+.prompt { display: flex; align-items: center; gap: 14px; font-size: 1.4rem; font-weight: 800; }
+.prompt p { margin: 0; }
+.target { font-size: 2.6rem; }
+.say { width: 72px; height: 72px; border-radius: 50%; border: none; background: var(--kw-accent); font-size: 2rem; cursor: pointer; }
+.choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+.choice {
+  min-width: 150px; padding: 22px 26px; border-radius: 22px; border: 3px solid var(--kw-border); background: var(--kw-card);
+  color: var(--kw-text); font: inherit; font-size: 2.4rem; font-weight: 800; cursor: pointer;
+}
+.choice.right { border-color: #3FA36B; background: #DDF5E6; color: #1E5E3A; }
+.choice.wrong { animation: shake 0.4s; border-style: dashed; }
+.level { margin: 0; color: var(--kw-dim); font-weight: 700; }
+@keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+@media (prefers-reduced-motion: reduce) { .choice.wrong { animation: none; } }
+[data-reduced-motion] .choice.wrong { animation: none; }
+
+.game { display: contents; }
+.game[hidden], .start[hidden] { display: none; }
+.start { padding: 28px 56px; border-radius: 999px; border: none; background: var(--kw-accent); color: var(--kw-accent-ink); font: inherit; font-size: 2.4rem; font-weight: 800; cursor: pointer; }
+.start:focus-visible, .choice:focus-visible, .say:focus-visible { outline: 3px solid var(--kw-text); outline-offset: 3px; }

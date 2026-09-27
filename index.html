@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sight words</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <button class="start" id="start" hidden>▶ Start</button>
+    <div class="game" id="game" hidden>
+    <header>
+      <div class="who" id="who"></div>
+      <div class="stars" id="stars" aria-live="polite"></div>
+    </header>
+    <section class="prompt">
+      <button class="say" id="say" aria-label="Say the word again">🔊</button>
+      <p id="ask">Tap the word you hear</p>
+    </section>
+    <section class="choices" id="choices" aria-label="Words"></section>
+    <p class="level" id="level"></p>
+    </div>
+  </main>
+  <script src="kinwall.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
