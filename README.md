@@ -1,8 +1,9 @@
 # Sight words
 
-A reading game for [Kinwall](https://github.com/JohnDuprey/kinwall), for ages 4 to 7. Kinwall says a word out loud and the child taps it. Ten stars move up a level, and each child's stars and level are saved.
+A reading game for [Kinwall](https://github.com/JohnDuprey/kinwall), for ages 4 to 8. Kinwall says a word out loud and the child taps it. Ten stars move up a level, and each child's stars and level are saved.
 
-- **Four levels** of common sight words, from "a, I, the" up to words like "again" and "thank".
+- **All 220 Dolch sight words**, the list most US schools use, from pre-primer ("a, see, the") to third grade ("together, laugh"), in 17 levels.
+- **Review after the last level:** every word comes round again, with the ones a child has missed more often.
 - **Spoken words and praise**, slowed down for clarity, with a 🔊 button to hear the word again.
 - **Kind by design:** no timers, no losing, and a missed word just gets another try.
 

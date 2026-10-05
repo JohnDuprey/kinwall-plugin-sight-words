@@ -1,7 +1,7 @@
 {
   "id": "sight-words",
   "name": "Sight words",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Hear a word, tap it. Stars and levels are saved for each child.",
   "entry": "index.html",
   "emoji": "🔤",
@@ -11,7 +11,7 @@
   ],
   "ages": {
     "min": 4,
-    "max": 7
+    "max": 8
   },
   "author": "Kinwall",
   "homepage": "https://github.com/JohnDuprey/kinwall-plugin-sight-words"
