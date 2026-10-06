@@ -54,12 +54,17 @@ function pickVoice() {
 }
 if (speech) { pickVoice(); speech.addEventListener?.('voiceschanged', pickVoice) }
 
+// No Web Speech here (Android's WebView): Kinwall speaks instead, when it can (Kinwall.speak).
+let kinwallSpeaks = false
+const canSay = () => !!speech || kinwallSpeaks
+
 let speaking = null // the current utterance, referenced so it isn't garbage-collected mid-sentence
 let turn = 0
 
 /** Speaks; resolves once it's finished (or after a fallback). `word`: one sight word, said slowly and clearly. */
 async function say(text, { word = false } = {}) {
-  if (!speech) return
+  const spoken = word ? `${SAY_AS[text.toLowerCase()] ?? text}.` : text // the period gives a word a clean ending
+  if (!speech) { if (kinwallSpeaks) await Kinwall.speak(spoken, { rate: word ? RATE.word : RATE.praise }); return }
   const mine = ++turn
   if (speech.speaking || speech.pending) {
     speech.cancel()
@@ -68,7 +73,6 @@ async function say(text, { word = false } = {}) {
   }
   speech.resume() // Chrome sometimes leaves the queue paused
   await new Promise(resolve => {
-    const spoken = word ? `${SAY_AS[text.toLowerCase()] ?? text}.` : text // the period gives a word a clean ending
     const u = new SpeechSynthesisUtterance(spoken)
     if (voice) { u.voice = voice; u.lang = voice.lang } else u.lang = 'en-US'
     u.rate = word ? RATE.word : RATE.praise
@@ -120,8 +124,8 @@ function next() {
   if (recent.length > (reviewing() ? RECENT * 2 : RECENT)) recent.shift()
   const pick = shuffle([target, ...shuffle(words.filter(w => w !== target)).slice(0, 2)])
   // No voice on this device: show the word and ask for its match instead.
-  el('ask').innerHTML = speech ? 'Tap the word you hear' : `Find: <span class="target">${target}</span>`
-  el('say').hidden = !speech
+  el('ask').innerHTML = canSay() ? 'Tap the word you hear' : `Find: <span class="target">${target}</span>`
+  el('say').hidden = !canSay()
   const box = el('choices')
   box.textContent = ''
   for (const w of pick) {
@@ -166,6 +170,7 @@ el('say').onclick = () => say(target, { word: true })
 
 Kinwall.ready().then(async ctx => {
   el('who').textContent = ctx.member ? `${ctx.member.avatar || ''} ${ctx.member.name}` : ''
+  kinwallSpeaks = !speech && !!ctx.canSpeak
   if (ctx.reducedMotion) document.documentElement.dataset.reducedMotion = ''
   const saved = await Kinwall.load().catch(() => ({}))
   if (saved.progress) {

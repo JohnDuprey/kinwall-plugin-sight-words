@@ -1,7 +1,7 @@
 {
   "id": "sight-words",
   "name": "Sight words",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Hear a word, tap it. Stars and levels are saved for each child.",
   "entry": "index.html",
   "emoji": "🔤",
