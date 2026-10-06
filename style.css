@@ -4,7 +4,7 @@
   --kw-font: system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; background: var(--kw-bg); color: var(--kw-text); font-family: var(--kw-font); }
+html, body { touch-action: pan-x pan-y; margin: 0; height: 100%; background: var(--kw-bg); color: var(--kw-text); font-family: var(--kw-font); }
 main { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 20px; }
 header { position: fixed; top: 12px; left: 16px; right: 16px; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.1rem; }
 .stars { letter-spacing: 2px; }
@@ -19,6 +19,8 @@ header { position: fixed; top: 12px; left: 16px; right: 16px; display: flex; jus
 }
 .choice.right { border-color: #3FA36B; background: #DDF5E6; color: #1E5E3A; }
 .choice.wrong { animation: shake 0.4s; border-style: dashed; }
+/* Resting (a cooldown, game.js): 🔊 while the word is said, the words just after a miss. Dimmed, not gone. */
+.resting { opacity: 0.45; cursor: default; transition: opacity 0.2s; }
 .level { margin: 0; color: var(--kw-dim); font-weight: 700; }
 @keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
 @media (prefers-reduced-motion: reduce) { .choice.wrong { animation: none; } }

@@ -86,6 +86,26 @@ async function say(text, { word = false } = {}) {
   })
 }
 
+// Cooldowns: 🔊 rests until the word is said plus REPLAY_REST, and after a wrong tap the words rest
+// for MISS_REST, so nobody spams the sound or taps every word in turn. Resting buttons are dimmed,
+// keep focus (aria-disabled, not disabled) and ignore presses: handlers check resting().
+const REPLAY_REST = 1500
+const MISS_REST = 1600
+const resting = b => !!b && b.classList.contains('resting')
+const restGen = new WeakMap() // button -> the latest rest, so an older one never ends a newer one early
+function rest(buttons, ms) {
+  const g = {}
+  for (const b of buttons) { restGen.set(b, g); b.classList.add('resting'); b.setAttribute('aria-disabled', 'true') }
+  if (ms != null) setTimeout(() => { for (const b of buttons) if (restGen.get(b) === g) { b.classList.remove('resting'); b.removeAttribute('aria-disabled') } }, ms)
+  return g
+}
+async function restWhile(buttons, promise, after = REPLAY_REST) {
+  const g = rest(buttons)
+  await promise
+  rest(buttons.filter(b => restGen.get(b) === g), after)
+}
+const hear = () => restWhile([el('say')], say(target, { word: true }))
+
 /** A different phrase from the one said last time. */
 function pickFrom(list) {
   const options = list.filter(p => p !== lastPraise)
@@ -136,15 +156,16 @@ function next() {
     box.append(b)
   }
   render()
-  say(target, { word: true })
+  hear()
 }
 
 async function choose(button, word) {
-  if (locked) return
+  if (locked || resting(button)) return
   if (word !== target) {
     if (!missedThis) { missedThis = true; progress.missed[target] = (progress.missed[target] || 0) + 1 } // once per word asked
     button.classList.remove('wrong'); void button.offsetWidth; button.classList.add('wrong')
-    say(target, { word: true })
+    hear()
+    rest([...el('choices').children], MISS_REST)
     return
   }
   locked = true
@@ -166,7 +187,7 @@ async function choose(button, word) {
   next()
 }
 
-el('say').onclick = () => say(target, { word: true })
+el('say').onclick = () => { if (!resting(el('say'))) hear() }
 
 Kinwall.ready().then(async ctx => {
   el('who').textContent = ctx.member ? `${ctx.member.avatar || ''} ${ctx.member.name}` : ''
